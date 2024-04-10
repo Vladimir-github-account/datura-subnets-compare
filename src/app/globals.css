@@ -1,33 +1,161 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@font-face {
+  font-family: "Haffer";
+  src: url("assets/fonts/Haffer/Haffer-Light.ttf");
+  font-weight: 300;
 }
 
-@media (prefers-color-scheme: dark) {
+@font-face {
+  font-family: "Haffer";
+  src: url("assets/fonts/Haffer/Haffer-Regular.ttf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Haffer";
+  src: url("assets/fonts/Haffer/Haffer-Medium.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Haffer";
+  src: url("assets/fonts/Haffer/Haffer-SemiBold.ttf");
+  font-weight: 600;
+}
+
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --toastify-toast-width: max;
+    --toastify-toast-min-height: 10px;
+    --toastify-toast-max-height: 50px;
+    --toastify-color-success: #5eab7c;
+
+    --main-background: #f2f2f2;
+    --secondary-background: #f2f2f2;
+    --primary: #2f343b;
+    --secondary: #2c313b;
+
+    --black-800: #f2f2f2;
+    --black-900: #e0e0e0;
+
+    --blue-400: #63abfd;
+
+    --gray-200: #4a4a4a;
+    --gray-600: #3a5bd00f;
+    --gray-650: #e7e5e5;
+    --gray-700: #e6e6e6;
+
+    --green-200: #e1e1e1;
+    --green-300: #29ab59;
+    --green-400: #1db254;
+    --green-800: #33b986c9;
+
+    --red-200: #e1e1e1;
+    --red-300: #dc304f;
+    --red-800: #fa626add;
+
+    --yellow-600: #486ef7;
+  }
+
+  .dark:root {
+    --main-background: #0c0b10;
+    --secondary-background: #111113;
+    --primary: #f3f4f6;
+    --secondary: #868f97;
+
+    --black-800: #131215;
+    --black-900: #08080b;
+
+    --blue-400: #63abfd;
+    --blue-700: #165baa;
+
+    --gray-200: #d9d9d9;
+    --gray-600: #28282a;
+    --gray-650: #1e1e1e;
+    --gray-700: #171719;
+
+    --green-200: #4ebe96;
+    --green-300: #4ebe96;
+    --green-400: #6cd291;
+    --green-800: #0d201a;
+
+    --red-200: #d84f68;
+    --red-300: #d84f68;
+    --red-800: #311d26;
+
+    --yellow-600: #c88159;
+  }
+
+  html {
+    font-family: "Haffer";
+    background-color: var(--main-background);
+    color: var(--primary);
+  }
+
+  .remove-arrow::-webkit-inner-spin-button,
+  .remove-arrow::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .remove-arrow {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
+  .form-select {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAQCAYAAAAMJL+VAAAABGdBTUEAALGPC/xhBQAAAQtJREFUOBG1lEEOgjAQRalbGj2OG9caOACn4ALGtfEuHACiazceR1PWOH/CNA3aMiTaBDpt/7zPdBKy7M/DCL9pGkvxxVp7KsvyJftL5rZt1865M+Ucq6pyyF3hNcI7Cuu+728QYn/JQA5yKaempxuZmQngOwEaYx55nu+1lQh8GIatMGi+01NwBcEmhxBqK4nAPZJ78K0KKFAJmR3oPp8+Iwgob0Oa6+TLoeCvRx+mTUYf/FVBGTPRwDkfLxnaSrRwcH0FWhNOmrkWYbE2XEicqgSa1J0LQ+aPCuQgZiLnwewbGuz5MGoAhcIkCQcjaTBjMgtXGURMVHC1wcQEy0J+Zlj8bKAnY1/UzDe2dbAVqfXn6wAAAABJRU5ErkJggg==");
+    background-size: 0.5rem;
+    background-position: right 0.2rem top 0.5rem;
+    background-repeat: no-repeat;
+  }
+
+  .form-select-big {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAQCAYAAAAMJL+VAAAABGdBTUEAALGPC/xhBQAAAQtJREFUOBG1lEEOgjAQRalbGj2OG9caOACn4ALGtfEuHACiazceR1PWOH/CNA3aMiTaBDpt/7zPdBKy7M/DCL9pGkvxxVp7KsvyJftL5rZt1865M+Ucq6pyyF3hNcI7Cuu+728QYn/JQA5yKaempxuZmQngOwEaYx55nu+1lQh8GIatMGi+01NwBcEmhxBqK4nAPZJ78K0KKFAJmR3oPp8+Iwgob0Oa6+TLoeCvRx+mTUYf/FVBGTPRwDkfLxnaSrRwcH0FWhNOmrkWYbE2XEicqgSa1J0LQ+aPCuQgZiLnwewbGuz5MGoAhcIkCQcjaTBjMgtXGURMVHC1wcQEy0J+Zlj8bKAnY1/UzDe2dbAVqfXn6wAAAABJRU5ErkJggg==");
+    background-size: 0.8rem;
+    background-position: right 1rem top 0.9rem;
+    background-repeat: no-repeat;
+  }
+
+  .no-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .prevent-select {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    border-radius: 100vh;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #bebebe;
+    border-radius: 100vh;
+    border: 4px solid var(--main-background);
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: #374151;
+    border-radius: 100vh;
+    border: 4px solid var(--main-background);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary);
   }
 }

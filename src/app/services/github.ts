@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-export const getData = async () => {
+export const getData = async (repo: string) => {
 
-  return await axios.get(`/api/github`);
+  return await axios.get(`/api/github`, {
+    params: {
+      repo
+    }
+  });
 };

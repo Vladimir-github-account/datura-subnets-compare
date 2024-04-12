@@ -1,9 +1,10 @@
-"use client";
+'use client'
 import { useEffect, useState } from 'react';
 import { getData } from '@/app/services/github';
 import { repos } from '@/app/constants';
 import MultipleBarChart from '@/app/components/common/Charts/MultipleBarChart';
 import LineChart from '@/app/components/common/Charts/LineChart';
+import ThemeSwitcherComponent from '@/app/components/common/buttons/ThemeSwitcher/ThemeSwitcher';
 
 export default function Home() {
   const [data, setData] = useState<any>([]);
@@ -42,6 +43,9 @@ export default function Home() {
       )}
       {data && data.length > 0 && (
         <div className="px-12 py-8">
+          <div className='fixed top-5 right-5'>
+            <ThemeSwitcherComponent />
+          </div>
           <MultipleBarChart data={data}/>
           <LineChart data={data}/>
         </div>

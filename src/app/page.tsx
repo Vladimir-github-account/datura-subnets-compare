@@ -5,28 +5,35 @@ import { repos } from '@/app/constants';
 import MultipleBarChart from '@/app/components/common/Charts/MultipleBarChart';
 import LineChart from '@/app/components/common/Charts/LineChart';
 import ThemeSwitcherComponent from '@/app/components/common/buttons/ThemeSwitcher/ThemeSwitcher';
+import { HomePageWrapper } from '@/app/components/common/wrappers/HomePageWrapper';
+import { useDataContext } from '@/app/context/dataContext';
+import { useActiveReposContext } from '@/app/context/activeReposContext';
 
 export default function Home() {
-  const [data, setData] = useState<any>([]);
+  const { data, setData } = useDataContext();
+  const { activeRepos,setActiveRepos } = useActiveReposContext();
   const [isDataLoading, setIsDataLoading] = useState<any>([]);
 
   useEffect(() => {
     const promises = repos.map( repo => getData(repo));
     Promise.allSettled(promises)
       .then(data => {
-        setData(data.reduce( (acc: any, el) => {
+        const successData = data.reduce( (acc: any, el) => {
             if (el.status === 'rejected') {
               return acc
             }
             return [...acc, el.value.data]
           }, []
-        ))
+        );
+
+        setData(successData);
+        setActiveRepos(successData);
       })
       .finally(() => setIsDataLoading(false));
   }, []);
 
   return (
-    <div className="min-h-screen" suppressHydrationWarning>
+    <HomePageWrapper>
       {isDataLoading && (
         <div className='min-h-screen flex justify-center items-center' role="status" suppressHydrationWarning>
           <svg aria-hidden="true" className="w-20 h-20 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -42,14 +49,14 @@ export default function Home() {
         </div>
       )}
       {data && data.length > 0 && (
-        <div className="px-12 py-8">
+        <div className="pl-72 pr-12 py-8">
           <div className='fixed top-5 right-5'>
             <ThemeSwitcherComponent />
           </div>
-          <MultipleBarChart data={data}/>
-          <LineChart data={data}/>
+          <MultipleBarChart data={activeRepos}/>
+          <LineChart data={activeRepos}/>
         </div>
       )}
-    </div>
+    </HomePageWrapper>
   );
 }

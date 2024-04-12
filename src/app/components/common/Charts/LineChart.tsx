@@ -12,6 +12,7 @@ import {
 } from 'chart.js';
 
 import { lineOptions } from '@/app/mocks/chart.mock';
+import { RepositoryData } from '@/app/interfaces/repositoryData';
 
 Chart.register(
   CategoryScale,
@@ -25,14 +26,14 @@ Chart.register(
 );
 
 interface ChartProps {
-  data: any
+  data: RepositoryData[]
 }
 
 const LineChart = ({ data }: ChartProps) => {
   const sortedData = [...data].sort( (a: any, b: any) => a.lastYearAdditionsCount - b.lastYearAdditionsCount );
   const { labels, lastYearAdditionsCount, lastYearDeletionsCount } = sortedData.reduce( (acc: any, el: any) => (
       {
-        labels: [...acc.labels, el.repo],
+        labels: [...acc.labels, el.repo.length > 30 ? el.repo.substring(0, 30) + '...' : el.repo],
         lastYearAdditionsCount: [...acc.lastYearAdditionsCount, el.lastYearAdditionsCount],
         lastYearDeletionsCount: [...acc.lastYearDeletionsCount, el.lastYearDeletionsCount],
       }

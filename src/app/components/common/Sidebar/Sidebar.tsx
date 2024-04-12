@@ -1,7 +1,9 @@
 import classNames from 'classnames';
+import { CheckCircle } from '@phosphor-icons/react';
 import { useDataContext } from '@/app/context/dataContext';
 import { useActiveReposContext } from '@/app/context/activeReposContext';
-import { CheckCircle } from '@phosphor-icons/react';
+import { SidebarListItem } from '@/app/components/common/Sidebar/SidebarListItem';
+import { RepositoryData } from '@/app/interfaces/repositoryData';
 
 export const Sidebar = () => {
   const { data } = useDataContext();
@@ -30,22 +32,14 @@ export const Sidebar = () => {
         />
       </div>
       <ul className='px-3 py-2 rounded-md'>
-        {data.map((el: any, index: number) => (
-          <li
-            className={classNames('text-xs pb-6 mr-1 opacity-80 text-gray-400 cursor-pointer hover:ml-2 transition-all select-none', {
-              '!opacity-100 !text-primary': activeRepos.find((repo: any) => repo.repo === el.repo),
-            })}
+        {data.map((el: RepositoryData, index: number) => (
+          <SidebarListItem
+            activeRepos={activeRepos}
+            itemData={el}
+            itemIndex={index}
             key={el.repo}
-            onClick={() => setActiveRepos((prevState: any) => {
-              let arr = [...prevState];
-              arr.splice(index, 0, el);
-              return prevState.find(((repo: any) => repo.repo === el.repo))
-                ? prevState.filter((repo: any) => repo.repo !== el.repo)
-                : arr;
-            })}
-          >
-            {el.repo}
-          </li>
+            setActiveRepos={setActiveRepos}
+          />
         ))}
       </ul>
     </div>

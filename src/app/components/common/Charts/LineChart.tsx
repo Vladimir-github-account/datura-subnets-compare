@@ -29,7 +29,7 @@ interface ChartProps {
 }
 
 const LineChart = ({ data }: ChartProps) => {
-  const sortedData = data.sort( (a: any, b: any) => a.lastYearAdditionsCount - b.lastYearAdditionsCount );
+  const sortedData = [...data].sort( (a: any, b: any) => a.lastYearAdditionsCount - b.lastYearAdditionsCount );
   const { labels, lastYearAdditionsCount, lastYearDeletionsCount } = sortedData.reduce( (acc: any, el: any) => (
       {
         labels: [...acc.labels, el.repo],

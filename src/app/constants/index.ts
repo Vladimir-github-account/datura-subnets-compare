@@ -13,7 +13,6 @@ export const repos = [
   'RusticLuftig/data-universe',
   'synapsec-ai/llm-defender-subnet',
   'blockchain-insights/blockchain-data-subnet',
-  'myshell-ai/MyShell-TTS-Subnet',
   'CortexLM/flavia',
   'corcel-api/cortex.t',
   'namoray/vision',

@@ -82,26 +82,40 @@ export const Sidebar = () => {
             />
             {sortOrder === 'ASC' ? (
               <SortAscending
-                className='cursor-pointer'
+                className={classNames('cursor-pointer', {
+                  'text-gray-400': selectedOption.value === 'default'
+                })}
                 data-tooltip-id='sort-order'
                 data-tooltip-delay-show={300}
                 data-tooltip-place='bottom-end'
                 size={30}
-                onClick={() => setSortOrder(sortOrder === 'ASC' ? 'DESC' : 'ASC')}
+                onClick={() => {
+                  if (selectedOption.value !== 'default'){
+                    setSortOrder(sortOrder === 'ASC' ? 'DESC' : 'ASC')
+                  }
+                }}
               />
             ) : (
               <SortDescending
-                className='cursor-pointer'
+                className={classNames('cursor-pointer', {
+                  'text-gray-400': selectedOption.value === 'default'
+                })}
                 data-tooltip-id='sort-order'
                 data-tooltip-delay-show={300}
                 data-tooltip-place='bottom-end'
                 size={30}
-                onClick={() => setSortOrder(sortOrder === 'DESC' ? 'ASC' : 'DESC')}
+                onClick={() => {
+                  if (selectedOption.value !== 'default'){
+                    setSortOrder(sortOrder === 'DESC' ? 'ASC' : 'DESC')
+                  }
+                }}
               />
             )}
-            <Tooltip id='sort-order'>
-              Change order
-            </Tooltip>
+            {selectedOption.value !== 'default' && (
+              <Tooltip id='sort-order'>
+                Change order
+              </Tooltip>
+            )}
           </div>
           <div className={classNames(
             'flex justify-between items-center pt-3 px-3 text-gray-400', {

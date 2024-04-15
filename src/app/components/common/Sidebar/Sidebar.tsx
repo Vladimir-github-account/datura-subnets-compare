@@ -1,15 +1,56 @@
+'use client';
+import { useEffect, useState } from 'react';
+import Select from 'react-select';
+import { Tooltip } from 'react-tooltip';
 import classNames from 'classnames';
-import { CheckCircle, SquareHalf } from '@phosphor-icons/react';
+import { CheckCircle, SortAscending, SortDescending, SquareHalf } from '@phosphor-icons/react';
 import { useDataContext } from '@/app/context/dataContext';
 import { useActiveReposContext } from '@/app/context/activeReposContext';
 import { useSidebarContext } from '@/app/context/sidebarContext';
 import { SidebarListItem } from '@/app/components/common/Sidebar/SidebarListItem';
 import { RepositoryData } from '@/app/interfaces/repositoryData';
 
+type OptionType = {
+  value: string;
+  label: string;
+};
+
+const options: OptionType[] = [
+  { value: 'default', label: 'Default' },
+  { value: 'stars', label: 'Stars' },
+  { value: 'contributorsCount', label: 'Contributors' },
+  { value: 'forks', label: 'Forks' },
+  { value: 'watchers', label: 'Watchers' },
+  { value: 'lastYearCommitsCount', label: 'Last year commits' },
+  { value: 'lastYearAdditionsCount', label: 'Last year additions' },
+  { value: 'lastYearDeletionsCount', label: 'Last year deletions' },
+];
+
 export const Sidebar = () => {
   const { data } = useDataContext();
   const { activeRepos, setActiveRepos } = useActiveReposContext();
   const { isOpen, setIsOpen } = useSidebarContext();
+  const [selectedOption, setSelectedOption] = useState(options[0]);
+  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC');
+
+  const handleChange = (option: any) => {
+    setSelectedOption(option);
+    if (option.value === 'default') {
+      setActiveRepos(data);
+    }
+  };
+
+  useEffect(() => {
+    if (sortOrder === 'ASC') {
+      setActiveRepos(prevState =>
+        [...prevState].sort((a: any, b: any) => a[selectedOption.value] - b[selectedOption.value])
+      );
+    } else {
+      setActiveRepos(prevState =>
+        [...prevState].sort((a: any, b: any) => b[selectedOption.value] - a[selectedOption.value])
+      );
+    }
+  }, [sortOrder, selectedOption]);
 
   return (
     <div
@@ -30,6 +71,37 @@ export const Sidebar = () => {
         <>
           <div className='border-b border-gray-100 border-opacity-60'>
             <h2 className='text-2xl my-6 ml-3.5'>Subnets</h2>
+          </div>
+          <div suppressHydrationWarning className='flex items-center pt-3 px-3 gap-4'>
+            <Select
+              instanceId='sort-select'
+              className='w-full font-medium text-[#2f343b]'
+              value={selectedOption}
+              onChange={handleChange}
+              options={options}
+            />
+            {sortOrder === 'ASC' ? (
+              <SortAscending
+                className='cursor-pointer'
+                data-tooltip-id='sort-order'
+                data-tooltip-delay-show={300}
+                data-tooltip-place='bottom-end'
+                size={30}
+                onClick={() => setSortOrder(sortOrder === 'ASC' ? 'DESC' : 'ASC')}
+              />
+            ) : (
+              <SortDescending
+                className='cursor-pointer'
+                data-tooltip-id='sort-order'
+                data-tooltip-delay-show={300}
+                data-tooltip-place='bottom-end'
+                size={30}
+                onClick={() => setSortOrder(sortOrder === 'DESC' ? 'ASC' : 'DESC')}
+              />
+            )}
+            <Tooltip id='sort-order'>
+              Change order
+            </Tooltip>
           </div>
           <div className={classNames(
             'flex justify-between items-center pt-3 px-3 text-gray-400', {
@@ -55,6 +127,7 @@ export const Sidebar = () => {
                 setActiveRepos={setActiveRepos}
               />
             ))}
+            <Tooltip id="list-item-tooltip" />
           </ul>
         </>
       )}

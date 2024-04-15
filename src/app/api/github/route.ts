@@ -34,47 +34,49 @@ export async function GET(req: NextRequest) {
         }
       }, { additions: 0, deletions: 0 })
       : { additions: 0, deletions: 0 };
-    // const { data: prs } = await axios.get<listRepoPullsResponse["data"]>(
-    //   `https://api.github.com/repos/${req.query.repo}/pulls?state=closed&base=${repoData.default_branch}&sort=created`,
-    //   config
-    // );
 
-    // const resultArr = prs.map(async (pr: any) => {
-    //   const { data: commits }  = await axios.get(pr.commits_url, config);
-    //   return await Promise.all(commits.map(async (commit: any) => {
-    //     const { data: commitInfo } = await axios.get(commit.url, config);
-    //
-    //     const author = commitInfo.commit.author.name;
-    //     const additions = commitInfo.stats.additions;
-    //     const deletions = commitInfo.stats.deletions;
-    //     return {
-    //       author,
-    //       additions,
-    //       deletions,
-    //       time: commitInfo.commit.author.date,
-    //       pr_number: pr.number,
-    //       pr_title: pr.title,
-    //       file_names: commitInfo.files,
-    //       commit_message: commitInfo.commit.message
-    //     }
-    //   }))
-    // });
-    // const results = await Promise.all(resultArr);
     return NextResponse.json({
-      // commitInfo: results.flat(2),
       forks: repoData.forks_count,
       stars: repoData.stargazers_count,
       watchers: repoData.subscribers_count,
-      contributorsCount: contributors.length,
+      contributorsCount: contributors.length || 0,
       repo,
       lastYearCommitsCount,
       lastYearAdditionsCount: lastYearCommitsActivity.additions,
       lastYearDeletionsCount: lastYearCommitsActivity.deletions,
     }, { status: 200 });
   } catch (e) {
+    console.log('error', e);
     return NextResponse.json(
       { error: 'Bad request.' },
       { status: 400 }
     );
   }
 }
+
+// const { data: prs } = await axios.get<listRepoPullsResponse["data"]>(
+//   `https://api.github.com/repos/${req.query.repo}/pulls?state=closed&base=${repoData.default_branch}&sort=created`,
+//   config
+// );
+
+// const resultArr = prs.map(async (pr: any) => {
+//   const { data: commits }  = await axios.get(pr.commits_url, config);
+//   return await Promise.all(commits.map(async (commit: any) => {
+//     const { data: commitInfo } = await axios.get(commit.url, config);
+//
+//     const author = commitInfo.commit.author.name;
+//     const additions = commitInfo.stats.additions;
+//     const deletions = commitInfo.stats.deletions;
+//     return {
+//       author,
+//       additions,
+//       deletions,
+//       time: commitInfo.commit.author.date,
+//       pr_number: pr.number,
+//       pr_title: pr.title,
+//       file_names: commitInfo.files,
+//       commit_message: commitInfo.commit.message
+//     }
+//   }))
+// });
+// const results = await Promise.all(resultArr);

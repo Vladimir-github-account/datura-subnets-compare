@@ -1,7 +1,6 @@
-import classNames from 'classnames';
-import { Tooltip } from 'react-tooltip';
-import { RepositoryData } from '@/app/interfaces/repositoryData';
 import { Dispatch, SetStateAction } from 'react';
+import classNames from 'classnames';
+import { RepositoryData } from '@/app/interfaces/repositoryData';
 
 export const SidebarListItem = ({
   activeRepos,
@@ -20,6 +19,7 @@ export const SidebarListItem = ({
     className={classNames('text-xs mb-6 mr-1 opacity-80 text-gray-400 cursor-pointer hover:ml-2 transition-all select-none', {
       '!opacity-100 !text-primary': isSelected,
     })}
+    data-tooltip-class-name='text-xs'
     data-tooltip-content={isSelected ? 'Click to deselect' : 'Click to select'}
     data-tooltip-id="list-item-tooltip"
     data-tooltip-place="bottom-end"
@@ -34,7 +34,6 @@ export const SidebarListItem = ({
       })
     }}
   >
-    <Tooltip id="list-item-tooltip" />
     {itemData.repo}
   </li>
 }

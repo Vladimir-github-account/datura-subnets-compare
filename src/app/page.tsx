@@ -1,18 +1,23 @@
 'use client'
 import { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { getData } from '@/app/services/github';
 import { repos } from '@/app/constants';
 import MultipleBarChart from '@/app/components/common/Charts/MultipleBarChart';
 import LineChart from '@/app/components/common/Charts/LineChart';
 import ThemeSwitcherComponent from '@/app/components/common/buttons/ThemeSwitcher/ThemeSwitcher';
 import { HomePageWrapper } from '@/app/components/common/wrappers/HomePageWrapper';
+
+// Context
 import { useDataContext } from '@/app/context/dataContext';
 import { useActiveReposContext } from '@/app/context/activeReposContext';
+import { useSidebarContext } from '@/app/context/sidebarContext';
 
 export default function Home() {
   const { data, setData } = useDataContext();
   const { activeRepos,setActiveRepos } = useActiveReposContext();
   const [isDataLoading, setIsDataLoading] = useState<any>([]);
+  const { isOpen } = useSidebarContext();
 
   useEffect(() => {
     const promises = repos.map( repo => getData(repo));
@@ -49,7 +54,10 @@ export default function Home() {
         </div>
       )}
       {data && data.length > 0 && (
-        <div className="pl-72 pr-12 py-8">
+        <div className={classNames('pr-12 py-8', {
+          'pl-72': isOpen,
+          'pl-12': !isOpen
+        })}>
           <div className='fixed top-5 right-5'>
             <ThemeSwitcherComponent />
           </div>

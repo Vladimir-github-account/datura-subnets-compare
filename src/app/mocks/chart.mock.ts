@@ -17,11 +17,16 @@ export const options: ChartOptions<"bar"> = {
   },
 };
 
-export const lineOptions: ChartOptions<"line"> = {
+export const activityChartOptions: ChartOptions<"bar"> = {
   elements: {
     line: {
       borderJoinStyle: 'round'
     }
+  },
+  scales: {
+    x: {
+      stacked: true,
+    },
   },
   responsive: true,
   maintainAspectRatio: false,

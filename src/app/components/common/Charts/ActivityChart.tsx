@@ -1,24 +1,24 @@
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import {
+  BarElement,
   CategoryScale,
   Chart,
   Filler,
   Legend,
   LinearScale,
-  LineElement,
   PointElement,
   Title,
   Tooltip
 } from 'chart.js';
 
-import { lineOptions } from '@/app/mocks/chart.mock';
+import { activityChartOptions } from '@/app/mocks/chart.mock';
 import { RepositoryData } from '@/app/interfaces/repositoryData';
 
 Chart.register(
+  BarElement,
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement,
   Title,
   Tooltip,
   Filler,
@@ -29,7 +29,7 @@ interface ChartProps {
   data: RepositoryData[]
 }
 
-const LineChart = ({ data }: ChartProps) => {
+const ActivityChart = ({ data }: ChartProps) => {
   const sortedData = [...data].sort( (a: any, b: any) => a.lastYearAdditionsCount - b.lastYearAdditionsCount );
   const { labels, lastYearAdditionsCount, lastYearDeletionsCount } = sortedData.reduce( (acc: any, el: any) => (
       {
@@ -46,28 +46,28 @@ const LineChart = ({ data }: ChartProps) => {
 
   const datasets = [
     {
-      backgroundColor: "rgba(0,255,72,0.5)",
-      borderColor: "rgb(30,225,90)",
+      borderColor: "rgb(49,253,112)",
+      backgroundColor: "rgba(0,255,166,0.8)",
       data: lastYearAdditionsCount,
-      fill: true,
+      // fill: true,
       label: 'The number of additions in the last 12 months',
-      tension: 0.1,
+      // tension: 0.1,
     },
     {
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
       borderColor: "rgb(255, 99, 132)",
+      backgroundColor: "rgba(255, 99, 132, 0.8)",
       data: lastYearDeletionsCount,
-      fill: true,
+      // fill: true,
       label: 'The number of deletions in the last 12 months',
-      tension: 0.1,
+      // tension: 0.1,
     },
   ];
 
   return (
     <div className='h-[500px] mb-5' suppressHydrationWarning>
-      <Line options={lineOptions} data={{ labels, datasets }} fallbackContent={"Loading..."}/>
+      <Bar options={activityChartOptions} data={{ labels, datasets }} fallbackContent={"Loading..."}/>
     </div>
   );
 };
 
-export default LineChart
+export default ActivityChart

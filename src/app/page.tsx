@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { getData } from '@/app/services/github';
 import { repos } from '@/app/constants';
 import MultipleBarChart from '@/app/components/common/Charts/MultipleBarChart';
-import LineChart from '@/app/components/common/Charts/LineChart';
+import ActivityChart from '@/app/components/common/Charts/ActivityChart';
 import ThemeSwitcherComponent from '@/app/components/common/buttons/ThemeSwitcher/ThemeSwitcher';
 import { HomePageWrapper } from '@/app/components/common/wrappers/HomePageWrapper';
 
@@ -62,7 +62,7 @@ export default function Home() {
             <ThemeSwitcherComponent />
           </div>
           <MultipleBarChart data={activeRepos}/>
-          <LineChart data={activeRepos}/>
+          <ActivityChart data={activeRepos}/>
         </div>
       )}
     </HomePageWrapper>

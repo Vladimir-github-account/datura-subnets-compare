@@ -24,8 +24,16 @@ export const activityChartOptions: ChartOptions<"bar"> = {
     }
   },
   scales: {
+    y: {
+      grid: {
+        color: "rgb(53, 162, 235, 0.15)"
+      },
+    },
     x: {
       stacked: true,
+      grid: {
+        display: false
+      },
     },
   },
   responsive: true,

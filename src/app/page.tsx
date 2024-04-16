@@ -6,18 +6,21 @@ import { repos } from '@/app/constants';
 import MultipleBarChart from '@/app/components/common/Charts/MultipleBarChart';
 import ActivityChart from '@/app/components/common/Charts/ActivityChart';
 import ThemeSwitcherComponent from '@/app/components/common/buttons/ThemeSwitcher/ThemeSwitcher';
+import PieChart from '@/app/components/common/Charts/PieChart';
 import { HomePageWrapper } from '@/app/components/common/wrappers/HomePageWrapper';
 
 // Context
 import { useDataContext } from '@/app/context/dataContext';
 import { useActiveReposContext } from '@/app/context/activeReposContext';
 import { useSidebarContext } from '@/app/context/sidebarContext';
+import { useHomePageChartContext } from '@/app/context/homePageChartContext';
 
 export default function Home() {
   const { data, setData } = useDataContext();
   const { activeRepos,setActiveRepos } = useActiveReposContext();
-  const [isDataLoading, setIsDataLoading] = useState<any>([]);
+  const { homePageChart } = useHomePageChartContext();
   const { isOpen } = useSidebarContext();
+  const [isDataLoading, setIsDataLoading] = useState<any>([]);
 
   useEffect(() => {
     const promises = repos.map( repo => getData(repo));
@@ -61,8 +64,9 @@ export default function Home() {
           <div className='fixed top-5 right-5'>
             <ThemeSwitcherComponent />
           </div>
-          <MultipleBarChart data={activeRepos}/>
-          <ActivityChart data={activeRepos}/>
+          {homePageChart === 'bar' && <MultipleBarChart data={activeRepos} />}
+          {homePageChart === 'pie' && <PieChart data={activeRepos} />}
+          <ActivityChart data={activeRepos} />
         </div>
       )}
     </HomePageWrapper>

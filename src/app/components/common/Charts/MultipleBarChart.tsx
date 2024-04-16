@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { Bar } from 'react-chartjs-2';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
-import { BarElement, CategoryScale, Chart, Legend, LinearScale, Title, Tooltip } from 'chart.js';
+import { ArrowSquareOut, ChartBarHorizontal, ChartBar, ChartPie, Stack, StackPlus, StackMinus, FlipHorizontal, FlipVertical } from '@phosphor-icons/react';
+import { Bar } from 'react-chartjs-2';
+import { BarElement, CategoryScale, Chart, Legend, LinearScale, Tooltip } from 'chart.js';
 import { options } from '@/app/mocks/chart.mock';
 import { RepositoryData } from '@/app/interfaces/repositoryData';
-import { ArrowSquareOut, ChartBarHorizontal, ChartBar, Stack, StackPlus, StackMinus, FlipHorizontal, FlipVertical } from '@phosphor-icons/react';
+import { useHomePageChartContext } from '@/app/context/homePageChartContext';
 
 Chart.register(
   CategoryScale,
   LinearScale,
   BarElement,
-  Title,
   Tooltip,
   Legend
 );
@@ -20,6 +20,7 @@ interface ChartProps {
 }
 
 const MultipleBarChart = ({ data }: ChartProps) => {
+  const { setHomePageChart } = useHomePageChartContext();
   const [isStacked, setIsStacked] = useState(false);
   const [indexAxis, setIndexAxis] = useState<'x' | 'y'>('x');
   const { contributorsCount, labels, forks, stars, watchers, lastYearCommitsCount } = data.reduce( (acc: any, el: RepositoryData) => (
@@ -106,7 +107,7 @@ const MultipleBarChart = ({ data }: ChartProps) => {
           data={{ labels, datasets }}
         />
         <Stack
-          className='cursor-pointer absolute top-0 right-14'
+          className='cursor-pointer absolute top-0 right-24'
           size={32}
           data-tooltip-id='chart-stack'
           data-tooltip-delay-show={300}
@@ -121,7 +122,7 @@ const MultipleBarChart = ({ data }: ChartProps) => {
         </ReactTooltip>
         {indexAxis === 'y' && (
           <ChartBarHorizontal
-            className='cursor-pointer absolute top-0 right-3'
+            className='cursor-pointer absolute top-0 right-[54px]'
             size={32}
             data-tooltip-id='chart-axis'
             data-tooltip-delay-show={300}
@@ -131,7 +132,7 @@ const MultipleBarChart = ({ data }: ChartProps) => {
         )}
         {indexAxis === 'x' && (
           <ChartBar
-            className='cursor-pointer absolute top-0 right-3'
+            className='cursor-pointer absolute top-0 right-[54px]'
             size={32}
             data-tooltip-id='chart-axis'
             data-tooltip-delay-show={300}
@@ -145,6 +146,14 @@ const MultipleBarChart = ({ data }: ChartProps) => {
             <span>{indexAxis === 'x' ? 'Horizontal' : 'Vertical'}</span>
           </div>
         </ReactTooltip>
+        <ChartPie
+          className='cursor-pointer absolute top-0 right-3'
+          size={32}
+          data-tooltip-id='chart-pie'
+          data-tooltip-delay-show={300}
+          data-tooltip-place='bottom-end'
+          onClick={() => setHomePageChart('pie')}
+        />
       </div>
     </div>
   );

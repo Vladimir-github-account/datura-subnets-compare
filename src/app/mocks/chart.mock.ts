@@ -17,6 +17,16 @@ export const options: ChartOptions<"bar"> = {
   },
 };
 
+export const pieChartOptions: ChartOptions<"pie"> = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
+};
+
 export const activityChartBarOptions: ChartOptions<"bar"> = {
   elements: {
     line: {

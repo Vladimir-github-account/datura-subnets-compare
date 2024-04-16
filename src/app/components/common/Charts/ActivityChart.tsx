@@ -12,7 +12,6 @@ import {
   Legend,
   LinearScale,
   PointElement,
-  Title,
   Tooltip
 } from 'chart.js';
 import { activityChartBarOptions, activityChartLineOptions } from '@/app/mocks/chart.mock';
@@ -24,7 +23,6 @@ Chart.register(
   LinearScale,
   LineElement,
   PointElement,
-  Title,
   Tooltip,
   Filler,
   Legend,

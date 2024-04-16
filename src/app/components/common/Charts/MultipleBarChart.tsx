@@ -4,7 +4,7 @@ import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { BarElement, CategoryScale, Chart, Legend, LinearScale, Title, Tooltip } from 'chart.js';
 import { options } from '@/app/mocks/chart.mock';
 import { RepositoryData } from '@/app/interfaces/repositoryData';
-import { Stack, StackPlus, StackMinus } from '@phosphor-icons/react';
+import { ArrowSquareOut, ChartBarHorizontal, ChartBar, Stack, StackPlus, StackMinus, FlipHorizontal, FlipVertical } from '@phosphor-icons/react';
 
 Chart.register(
   CategoryScale,
@@ -21,6 +21,7 @@ interface ChartProps {
 
 const MultipleBarChart = ({ data }: ChartProps) => {
   const [isStacked, setIsStacked] = useState(false);
+  const [indexAxis, setIndexAxis] = useState<'x' | 'y'>('x');
   const { contributorsCount, labels, forks, stars, watchers, lastYearCommitsCount } = data.reduce( (acc: any, el: RepositoryData) => (
       {
         contributorsCount: [...acc.contributorsCount, el.contributorsCount],
@@ -82,22 +83,27 @@ const MultipleBarChart = ({ data }: ChartProps) => {
     <div className='h-[600px] mb-12 flex gap-6' suppressHydrationWarning>
       <div className='w-full overflow-auto relative'>
         <Bar
-          options={{ ...options, scales: {
-            y: {
-              stacked: isStacked,
-              grid: {
-                color: "rgb(53, 162, 235, 0.15)",
+          options={{
+            ...options,
+            indexAxis,
+            scales: {
+              y: {
+                stacked: isStacked,
+                grid: {
+                  display: indexAxis === 'x',
+                  color: "rgb(53, 162, 235, 0.15)",
+                },
+              },
+              x: {
+                stacked: isStacked,
+                grid: {
+                  color: "rgb(53, 162, 235, 0.15)",
+                  display: indexAxis === 'y',
+                },
               },
             },
-            x: {
-              stacked: isStacked,
-              grid: {
-                display: false
-              },
-            },
-          }}}
+          }}
           data={{ labels, datasets }}
-          fallbackContent={"Loading..."}
         />
         <Stack
           className='cursor-pointer absolute top-0 right-14'
@@ -111,6 +117,32 @@ const MultipleBarChart = ({ data }: ChartProps) => {
           <div className='flex gap-2'>
             {isStacked ? <StackMinus size={24} /> : <StackPlus size={24} />}
             <span>{isStacked ? 'Unstack' : 'Stack'}</span>
+          </div>
+        </ReactTooltip>
+        {indexAxis === 'y' && (
+          <ChartBarHorizontal
+            className='cursor-pointer absolute top-0 right-3'
+            size={32}
+            data-tooltip-id='chart-axis'
+            data-tooltip-delay-show={300}
+            data-tooltip-place='bottom-end'
+            onClick={() => setIndexAxis(prevState => 'x')}
+          />
+        )}
+        {indexAxis === 'x' && (
+          <ChartBar
+            className='cursor-pointer absolute top-0 right-3'
+            size={32}
+            data-tooltip-id='chart-axis'
+            data-tooltip-delay-show={300}
+            data-tooltip-place='bottom-end'
+            onClick={() => setIndexAxis(prevState => 'y')}
+          />
+        )}
+        <ReactTooltip id='chart-axis'>
+          <div className='flex gap-2 select-none'>
+            {indexAxis === 'x' ? <FlipVertical size={24} /> : <FlipHorizontal size={24} />}
+            <span>{indexAxis === 'x' ? 'Horizontal' : 'Vertical'}</span>
           </div>
         </ReactTooltip>
       </div>

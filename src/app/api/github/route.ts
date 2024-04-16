@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { Endpoints } from "@octokit/types";
@@ -10,14 +10,35 @@ type weeklyCommitCountResponse = Endpoints['GET /repos/{owner}/{repo}/stats/part
 type weeklyCommitActivityResponse = Endpoints['GET /repos/{owner}/{repo}/stats/code_frequency']["response"];
 type contributorsResponse = Endpoints['GET /repos/{owner}/{repo}/stats/contributors']["response"];
 
-const config = {
+const config: AxiosRequestConfig = {
   headers: {
     'Authorization': `token ${process.env.GITHUB_TOKEN}`,
-  }
+  },
 };
 
 export async function GET(req: NextRequest) {
   try {
+    let retryCounter = 5;
+    axios.interceptors.response.use((response) => {
+      if (
+        response.status === 202 &&
+        retryCounter > 0
+      ) {
+        const { config } = response;
+        const originalConfig = config;
+        const waitTime = response.headers['x-retry-after'] * 1000 || 5000;
+        retryCounter += -1;
+
+        return new Promise((resolve, reject) => {
+          setTimeout(() => resolve(axios.request(originalConfig)), waitTime);
+        });
+      }
+
+      return response;
+    }, error => {
+      return Promise.reject(error);
+    });
+
     const repo = req.nextUrl.searchParams.get('repo');
     // const { data: commit_activity } = await axios.get<lastYearCommitActivityResponse["data"]>(`https://api.github.com/repos/${repo}/stats/commit_activity`, config);
     // const lastYearCommitsCount2 = commit_activity.reduce((acc, el) => acc + el.total, 0);
@@ -26,6 +47,7 @@ export async function GET(req: NextRequest) {
     const { data: weeklyCommitActivity } = await axios.get<weeklyCommitActivityResponse["data"]>(`https://api.github.com/repos/${repo}/stats/code_frequency`, config);
     const { data: contributors } = await axios.get<contributorsResponse["data"]>(`https://api.github.com/repos/${repo}/stats/contributors`, config);
     const lastYearCommitsCount = weeklyCommitCount.all.reduce((acc, el) => acc + el, 0);
+
     const lastYearCommitsActivity = Array.isArray(weeklyCommitActivity)
       ? weeklyCommitActivity.reduce((acc, el) => {
         return {

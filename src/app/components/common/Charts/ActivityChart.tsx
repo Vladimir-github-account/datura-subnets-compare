@@ -1,6 +1,10 @@
-import { Bar } from 'react-chartjs-2';
+import { useState } from 'react';
+import { ChartBar, ChartLine } from '@phosphor-icons/react';
+import { Bar, Line } from 'react-chartjs-2';
+import classNames from 'classnames';
 import {
   BarElement,
+  LineElement,
   CategoryScale,
   Chart,
   Filler,
@@ -10,14 +14,14 @@ import {
   Title,
   Tooltip
 } from 'chart.js';
-
-import { activityChartOptions } from '@/app/mocks/chart.mock';
+import { activityChartBarOptions, activityChartLineOptions } from '@/app/mocks/chart.mock';
 import { RepositoryData } from '@/app/interfaces/repositoryData';
 
 Chart.register(
   BarElement,
   CategoryScale,
   LinearScale,
+  LineElement,
   PointElement,
   Title,
   Tooltip,
@@ -30,6 +34,7 @@ interface ChartProps {
 }
 
 const ActivityChart = ({ data }: ChartProps) => {
+  const [chartType, setChartType] = useState<'line' | 'bar'>('bar');
   const { labels, lastYearAdditionsCount, lastYearDeletionsCount } = data.reduce( (acc: any, el: any) => (
       {
         labels: [...acc.labels, el.repo.length > 30 ? el.repo.substring(0, 30) + '...' : el.repo],
@@ -48,23 +53,48 @@ const ActivityChart = ({ data }: ChartProps) => {
       borderColor: "rgb(49,253,112)",
       backgroundColor: "rgba(0,255,166,0.8)",
       data: lastYearAdditionsCount,
-      // fill: true,
       label: 'The number of additions in the last 12 months',
-      // tension: 0.1,
     },
     {
       borderColor: "rgb(255, 99, 132)",
       backgroundColor: "rgba(255, 99, 132, 0.8)",
       data: lastYearDeletionsCount,
-      // fill: true,
       label: 'The number of deletions in the last 12 months',
-      // tension: 0.1,
     },
   ];
 
   return (
     <div className='h-[500px] mb-5' suppressHydrationWarning>
-      <Bar options={activityChartOptions} data={{ labels, datasets }} fallbackContent={"Loading..."}/>
+      <div className='w-full !h-[500px] relative'>
+        {chartType === 'bar' && (
+          <Bar options={activityChartBarOptions} data={{ labels, datasets }} />
+        )}
+        {chartType === 'line' && (
+          <Line options={activityChartLineOptions} data={{ labels, datasets }} />
+        )}
+        <ChartLine
+          className={classNames('cursor-pointer absolute top-0 right-16', {
+            'text-gray-400': chartType === 'line'
+          })}
+          size={32}
+          onClick={() => {
+            if (chartType === 'bar'){
+              setChartType( prevState => 'line')
+            }
+          }}
+        />
+        <ChartBar
+          className={classNames('cursor-pointer absolute top-0 right-6', {
+            'text-gray-400': chartType === 'bar'
+          })}
+          size={32}
+          onClick={() => {
+            if (chartType === 'line'){
+              setChartType( prevState => 'bar')
+            }
+          }}
+        />
+      </div>
     </div>
   );
 };

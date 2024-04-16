@@ -46,30 +46,35 @@ const MultipleBarChart = ({ data }: ChartProps) => {
       data: contributorsCount,
       borderColor: "rgb(49,253,112)",
       backgroundColor: "rgba(0,255,166,0.8)",
+      maxBarThickness: 250,
     },
     {
       label: 'Watchers',
       data: watchers,
       borderColor: "rgb(255, 99, 44)",
       backgroundColor: "rgba(255, 99, 44, 0.8)",
+      maxBarThickness: 250,
     },
     {
       label: 'Forks',
       data: forks,
       borderColor: "rgb(53, 162, 235)",
       backgroundColor: "rgba(53, 162, 235, 0.8)",
+      maxBarThickness: 250,
     },
     {
       label: 'Stars',
       data: stars,
       borderColor: "rgb(241,202,48)",
       backgroundColor: "rgba(253, 216, 53, 0.8)",
+      maxBarThickness: 250,
     },
     {
       label: 'Number of commits in the last 12 months',
       data: lastYearCommitsCount,
       borderColor: "rgb(255, 99, 132)",
       backgroundColor: "rgba(255, 99, 132, 0.8)",
+      maxBarThickness: 250,
     },
   ];
 

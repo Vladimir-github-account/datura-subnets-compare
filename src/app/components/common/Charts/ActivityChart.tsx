@@ -54,12 +54,14 @@ const ActivityChart = ({ data }: ChartProps) => {
       backgroundColor: "rgba(0,255,166,0.8)",
       data: lastYearAdditionsCount,
       label: 'The number of additions in the last 12 months',
+      maxBarThickness: 250,
     },
     {
       borderColor: "rgb(255, 99, 132)",
       backgroundColor: "rgba(255, 99, 132, 0.8)",
       data: lastYearDeletionsCount,
       label: 'The number of deletions in the last 12 months',
+      maxBarThickness: 250,
     },
   ];
 

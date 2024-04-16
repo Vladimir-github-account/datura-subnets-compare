@@ -54,7 +54,7 @@ export default function Home() {
         </div>
       )}
       {data && data.length > 0 && (
-        <div className={classNames('pr-12 py-8', {
+        <div className={classNames('pr-12 py-8 transition-all duration-300 ease-in-out', {
           'pl-72': isOpen,
           'pl-12': !isOpen
         })}>

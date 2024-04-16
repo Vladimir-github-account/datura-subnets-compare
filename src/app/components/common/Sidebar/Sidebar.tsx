@@ -54,7 +54,7 @@ export const Sidebar = () => {
 
   return (
     <div
-      className={classNames('fixed top-0 bottom-0 overflow-auto bg-secondary-background', {
+      className={classNames('fixed top-0 bottom-0 overflow-auto bg-secondary-background transition-all duration-300 ease-in-out', {
         'w-12': !isOpen,
         'w-72': isOpen
       })}

@@ -62,12 +62,13 @@ const StatsChart = ({ data }: ChartProps) => {
 
   return (
     <div className='h-[800px] overflow-auto mb-12 flex gap-6' suppressHydrationWarning>
-      <div className='w-full min-w-[1000px] overflow-auto relative'>
+      <div className='w-full min-w-[900px] overflow-auto relative'>
         <MultipleBarChart
           datasets={datasets}
           defaultAxis='y'
           labels={labels}
           isStacked={isStacked}
+          isDisplayLegend
         />
         <Stack
           className='cursor-pointer absolute top-0 right-24'

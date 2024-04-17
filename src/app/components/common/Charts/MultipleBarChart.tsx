@@ -19,9 +19,10 @@ interface ChartProps {
   isStacked: boolean,
   labels: string[],
   defaultAxis: 'x' | 'y',
+  isDisplayLegend: boolean,
 }
 
-const MultipleBarChart = ({ datasets, labels, defaultAxis, isStacked }: ChartProps) => {
+const MultipleBarChart = ({ datasets, isDisplayLegend, labels, defaultAxis, isStacked }: ChartProps) => {
   const { theme } = useTheme();
   const [indexAxis, setIndexAxis] = useState<'x' | 'y'>(defaultAxis);
 
@@ -32,6 +33,27 @@ const MultipleBarChart = ({ datasets, labels, defaultAxis, isStacked }: ChartPro
           ...options,
           color: theme === 'light' ? '#2f343b' : '#F3F4F6',
           indexAxis,
+          plugins: {
+            legend: {
+              display: isDisplayLegend,
+              title: {
+                display: true,
+                text: "Please select a fields",
+                padding: 2,
+                font: {
+                  size: 18,
+                }
+              },
+              labels: {
+                usePointStyle: true,
+                pointStyle: "circle",
+                font: {
+                  size: 14
+                },
+              },
+              position: "bottom" as const,
+            },
+          },
           scales: {
             y: {
               stacked: isStacked,

@@ -3,26 +3,6 @@ import { ChartOptions } from "chart.js";
 export const options: ChartOptions<"bar"> = {
   responsive: true,
   maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      title: {
-        display: true,
-        text: "Please select a fields",
-        padding: 2,
-        font: {
-          size: 18,
-        }
-      },
-      labels: {
-        usePointStyle: true,
-        pointStyle: "circle",
-        font: {
-          size: 14
-        },
-      },
-      position: "bottom" as const,
-    },
-  },
 };
 
 export const pieChartOptions: ChartOptions<"pie"> = {

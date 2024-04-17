@@ -83,7 +83,19 @@ const CommitsActivityChart = ({ data }: ChartProps) => {
   ];
 
   return (
-    <div className='h-[800px] mb-12 flex items-center gap-6' suppressHydrationWarning>
+    <div className='mb-12 flex flex-col'>
+      <div className='overflow-x-auto overflow-y-hidden'
+           suppressHydrationWarning>
+        <div className='w-full h-[700px] min-w-[900px] overflow-auto relative'>
+          <MultipleBarChart
+            datasets={datasets.filter((dataField) => dataField.label === field)}
+            defaultAxis='x'
+            labels={chartLabels}
+            isDisplayLegend={false}
+            isStacked={false}
+          />
+        </div>
+      </div>
       <RadioGroup
         fields={[
           '# of commits in the last week',
@@ -91,17 +103,10 @@ const CommitsActivityChart = ({ data }: ChartProps) => {
           '# of commits in the last 3 months',
           '# of commits in the last 12 months',
         ]}
+        inline
         selectedField={field}
         onChangeField={onChangeField}
       />
-      <div className='w-full h-[800px] min-w-[900px] overflow-auto relative'>
-        <MultipleBarChart
-          datasets={datasets.filter((dataField) => dataField.label === field)}
-          defaultAxis='x'
-          labels={chartLabels}
-          isStacked={false}
-        />
-      </div>
     </div>
   );
 };

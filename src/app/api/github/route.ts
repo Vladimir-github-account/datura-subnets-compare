@@ -18,7 +18,7 @@ const config: AxiosRequestConfig = {
 
 export async function GET(req: NextRequest) {
   try {
-    let retryCounter = 5;
+    let retryCounter = 1;
     axios.interceptors.response.use((response) => {
       if (
         response.status === 202 &&
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
       ) {
         const { config } = response;
         const originalConfig = config;
-        const waitTime = response.headers['x-retry-after'] * 1000 || 5000;
+        const waitTime = response.headers['x-retry-after'] * 1000 || 100;
         retryCounter += -1;
 
         return new Promise((resolve, reject) => {

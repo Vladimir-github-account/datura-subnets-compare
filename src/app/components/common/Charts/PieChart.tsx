@@ -39,28 +39,24 @@ const PieChart = ({ data }: ChartProps) => {
       data: contributorsCount,
       borderColor: "rgb(57,243,155)",
       backgroundColor: "rgba(0,255,166,0.8)",
-      maxBarThickness: 250,
     },
     {
       label: 'Watchers',
       data: watchers,
       borderColor: "rgb(255, 99, 44)",
       backgroundColor: "rgba(255, 99, 44, 0.8)",
-      maxBarThickness: 250,
     },
     {
       label: 'Forks',
       data: forks,
       borderColor: "rgb(53, 162, 235)",
       backgroundColor: "rgba(53, 162, 235, 0.8)",
-      maxBarThickness: 250,
     },
     {
       label: 'Stars',
       data: stars,
       borderColor: "rgb(241,202,48)",
       backgroundColor: "rgba(253, 216, 53, 0.8)",
-      maxBarThickness: 250,
     },
   ];
 
@@ -102,7 +98,7 @@ const PieChart = ({ data }: ChartProps) => {
           data={{ labels, datasets: fields.filter((dataField) => dataField.label === field) }}
         />
         <ChartBar
-          className='cursor-pointer absolute top-0 right-3'
+          className='cursor-pointer absolute top-0 right-[52px]'
           size={32}
           data-tooltip-id='chart-pie'
           data-tooltip-delay-show={300}

@@ -53,7 +53,7 @@ const MultipleBarChart = ({ datasets, labels, defaultAxis, isStacked }: ChartPro
       />
       {indexAxis === 'y' && (
         <ChartBarHorizontal
-          className='cursor-pointer absolute top-0 right-[54px]'
+          className='cursor-pointer absolute top-0 right-3'
           size={32}
           data-tooltip-id='chart-axis'
           data-tooltip-delay-show={300}
@@ -63,7 +63,7 @@ const MultipleBarChart = ({ datasets, labels, defaultAxis, isStacked }: ChartPro
       )}
       {indexAxis === 'x' && (
         <ChartBar
-          className='cursor-pointer absolute top-0 right-[54px]'
+          className='cursor-pointer absolute top-0 right-3'
           size={32}
           data-tooltip-id='chart-axis'
           data-tooltip-delay-show={300}

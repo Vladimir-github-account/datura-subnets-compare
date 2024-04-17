@@ -24,6 +24,7 @@ export async function GET(req: NextRequest) {
         response.status === 202 &&
         retryCounter > 0
       ) {
+        // console.log(retryCounter);
         const { config } = response;
         const originalConfig = config;
         const waitTime = response.headers['x-retry-after'] * 1000 || 100;
@@ -40,13 +41,15 @@ export async function GET(req: NextRequest) {
     });
 
     const repo = req.nextUrl.searchParams.get('repo');
-    // const { data: commit_activity } = await axios.get<lastYearCommitActivityResponse["data"]>(`https://api.github.com/repos/${repo}/stats/commit_activity`, config);
-    // const lastYearCommitsCount2 = commit_activity.reduce((acc, el) => acc + el.total, 0);
     const { data: repoData } = await axios.get<listUserReposResponse["data"]>(`https://api.github.com/repos/${repo}`, config);
     const { data: weeklyCommitCount } = await axios.get<weeklyCommitCountResponse["data"]>(`https://api.github.com/repos/${repo}/stats/participation`, config);
     const { data: weeklyCommitActivity } = await axios.get<weeklyCommitActivityResponse["data"]>(`https://api.github.com/repos/${repo}/stats/code_frequency`, config);
     const { data: contributors } = await axios.get<contributorsResponse["data"]>(`https://api.github.com/repos/${repo}/stats/contributors`, config);
-    const lastYearCommitsCount = weeklyCommitCount.all.reduce((acc, el) => acc + el, 0);
+    const commitArr = [...weeklyCommitCount.all].reverse();
+    const lastYearCommitsCount = commitArr.reduce((acc, el) => acc + el, 0);
+    const lastThreeMonthsCommitsCount = [...commitArr].slice(0, 13).reduce((acc, el) => acc + el, 0);
+    const lastMonthCommitsCount = [...commitArr].slice(0, 4).reduce((acc, el) => acc + el, 0);
+    const weekCommitsCount = commitArr[0];
 
     const lastYearCommitsActivity = Array.isArray(weeklyCommitActivity)
       ? weeklyCommitActivity.reduce((acc, el) => {
@@ -58,12 +61,15 @@ export async function GET(req: NextRequest) {
       : { additions: 0, deletions: 0 };
 
     return NextResponse.json({
+      repo,
       forks: repoData.forks_count,
       stars: repoData.stargazers_count,
       watchers: repoData.subscribers_count,
       contributorsCount: contributors.length || 0,
-      repo,
       lastYearCommitsCount,
+      lastMonthCommitsCount,
+      lastThreeMonthsCommitsCount,
+      weekCommitsCount,
       lastYearAdditionsCount: lastYearCommitsActivity.additions,
       lastYearDeletionsCount: lastYearCommitsActivity.deletions,
     }, { status: 200 });

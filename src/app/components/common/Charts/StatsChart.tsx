@@ -84,7 +84,7 @@ const StatsChart = ({ data }: ChartProps) => {
           </div>
         </ReactTooltip>
         <ChartPie
-          className='cursor-pointer absolute top-0 right-3'
+          className='cursor-pointer absolute top-0 right-[52px]'
           size={32}
           data-tooltip-id='chart-pie'
           data-tooltip-delay-show={300}

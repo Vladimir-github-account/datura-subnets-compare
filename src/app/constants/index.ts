@@ -27,5 +27,12 @@ export const repos = [
   'fractal-net/fractal',
   'womboai/wombo-bittensor-subnet',
   'tao-accounting-system-protocol/tas',
-  'It-s-AI/llm-detection'
+  'It-s-AI/llm-detection',
+  'eclipsevortex/SubVortex',
+  'gitphantomman/d3_subnet',
+  'ceterum1/llm-defender-subnet',
+  'eseckft/BitAds.ai',
+  'omegalabsinc/omegalabs-bittensor-subnet',
+  'teast21/snpOracle',
+  'nimaaghli/NASChain',
 ]

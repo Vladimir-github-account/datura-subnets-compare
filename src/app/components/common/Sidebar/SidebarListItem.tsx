@@ -7,11 +7,15 @@ export const SidebarListItem = ({
   itemData,
   itemIndex,
   setActiveRepos,
+  sortingField,
+  sortOrder
 }: {
   activeRepos: RepositoryData[];
   itemData: RepositoryData;
   itemIndex: number;
   setActiveRepos: Dispatch<SetStateAction<RepositoryData[]>>;
+  sortingField: string;
+  sortOrder: 'ASC' | 'DESC';
 }) => {
   const isSelected = activeRepos.find((repo: any) => repo.repo === itemData.repo)
 
@@ -27,7 +31,15 @@ export const SidebarListItem = ({
     onClick={() => {
       setActiveRepos((prevState: any) => {
         let arr = [...prevState];
-        arr.splice(itemIndex, 0, itemData);
+        if (sortingField === 'default') {
+          arr.splice(itemIndex, 0, itemData);
+        } else {
+          if (sortOrder === 'ASC') {
+            arr = [...arr, itemData].sort((a: any, b: any) => a[sortingField] - b[sortingField]);
+          } else {
+            arr = [...arr, itemData].sort((a: any, b: any) => b[sortingField] - a[sortingField])
+          }
+        }
         return prevState.find(((repo: any) => repo.repo === itemData.repo))
           ? prevState.filter((repo: any) => repo.repo !== itemData.repo)
           : arr;

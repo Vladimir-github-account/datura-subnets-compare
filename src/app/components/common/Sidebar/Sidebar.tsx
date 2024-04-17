@@ -142,6 +142,8 @@ export const Sidebar = () => {
                 itemIndex={index}
                 key={el.repo}
                 setActiveRepos={setActiveRepos}
+                sortOrder={sortOrder}
+                sortingField={selectedOption.value}
               />
             ))}
             <Tooltip id="list-item-tooltip" />

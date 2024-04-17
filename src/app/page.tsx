@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { getData } from '@/app/services/github';
 import { repos } from '@/app/constants';
-import MultipleBarChart from '@/app/components/common/Charts/MultipleBarChart';
 import ActivityChart from '@/app/components/common/Charts/ActivityChart';
 import ThemeSwitcherComponent from '@/app/components/common/buttons/ThemeSwitcher/ThemeSwitcher';
 import PieChart from '@/app/components/common/Charts/PieChart';
+import CommitsActivityChart from '@/app/components/common/Charts/CommitsActivityChart';
 import { HomePageWrapper } from '@/app/components/common/wrappers/HomePageWrapper';
 
 // Context
@@ -14,6 +14,7 @@ import { useDataContext } from '@/app/context/dataContext';
 import { useActiveReposContext } from '@/app/context/activeReposContext';
 import { useSidebarContext } from '@/app/context/sidebarContext';
 import { useHomePageChartContext } from '@/app/context/homePageChartContext';
+import StatsChart from '@/app/components/common/Charts/StatsChart';
 
 export default function Home() {
   const { data, setData } = useDataContext();
@@ -61,12 +62,15 @@ export default function Home() {
           'pl-72': isOpen,
           'pl-12': !isOpen
         })}>
-          <div className='fixed top-5 right-5'>
-            <ThemeSwitcherComponent />
+          <div className='fixed top-4 right-3'>
+            <ThemeSwitcherComponent/>
           </div>
-          {homePageChart === 'bar' && <MultipleBarChart data={activeRepos} />}
-          {homePageChart === 'pie' && <PieChart data={activeRepos} />}
-          <ActivityChart data={activeRepos} />
+          <h2 className='pl-5 py-3.5 mb-3 text-xl text-gray-500'>Stats</h2>
+          {homePageChart === 'bar' && <StatsChart data={activeRepos}/>}
+          {homePageChart === 'pie' && <PieChart data={activeRepos}/>}
+          <h2 className='pl-5 py-3.5 mb-3 text-xl text-gray-500'>Activity</h2>
+          <CommitsActivityChart data={activeRepos}/>
+          <ActivityChart data={activeRepos}/>
         </div>
       )}
     </HomePageWrapper>

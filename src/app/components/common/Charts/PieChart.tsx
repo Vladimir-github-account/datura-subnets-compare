@@ -1,11 +1,11 @@
 import React, { ChangeEvent, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { ArcElement, Chart, Legend, Tooltip } from 'chart.js';
+import { ChartBar } from '@phosphor-icons/react';
 import { pieChartOptions } from '@/app/mocks/chart.mock';
 import { RepositoryData } from '@/app/interfaces/repositoryData';
-import { ChartBar } from '@phosphor-icons/react';
+import { RadioGroup } from '@/app/components/common/RadioGroup/RadioGroup';
 import { useHomePageChartContext } from '@/app/context/homePageChartContext';
-import RadioButton from '@/app/components/common/buttons/RadioButton/RadioButton';
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -15,20 +15,18 @@ interface ChartProps {
 
 const PieChart = ({ data }: ChartProps) => {
   const { setHomePageChart } = useHomePageChartContext();
-  const [field, setField] = useState<'Contributors' | 'Watchers' | 'Forks' | 'Stars' | '# of commits in the last 12 months'>('Stars');
-  const { contributorsCount, labels, forks, stars, watchers, lastYearCommitsCount } = data.reduce( (acc: any, el: RepositoryData) => (
+  const [field, setField] = useState<'Contributors' | 'Watchers' | 'Forks' | 'Stars'>('Stars');
+  const { contributorsCount, labels, forks, stars, watchers } = data.reduce( (acc: any, el: RepositoryData) => (
       {
         contributorsCount: [...acc.contributorsCount, el.contributorsCount],
         labels: [...acc.labels, el.repo.length > 30 ? el.repo.substring(0, 30) + '...' : el.repo],
         forks: [...acc.forks, el.forks],
         stars: [...acc.stars, el.stars],
         watchers: [...acc.watchers, el.watchers],
-        lastYearCommitsCount: [...acc.lastYearCommitsCount, el.lastYearCommitsCount],
       }
     ), {
       contributorsCount: [],
       labels: [],
-      lastYearCommitsCount: [],
       forks: [],
       stars: [],
       watchers: [],
@@ -64,85 +62,19 @@ const PieChart = ({ data }: ChartProps) => {
       backgroundColor: "rgba(253, 216, 53, 0.8)",
       maxBarThickness: 250,
     },
-    {
-      label: '# of commits in the last 12 months',
-      data: lastYearCommitsCount,
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "rgba(255, 99, 132, 0.8)",
-      maxBarThickness: 250,
-    },
   ];
 
   const onChangeField = (e: ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name as 'Contributors' | 'Watchers' | 'Forks' | 'Stars' | '# of commits in the last 12 months';
-    switch (name) {
-      case 'Contributors':
-        setField('Contributors');
-        break;
-      case 'Watchers':
-        setField('Watchers');
-        break;
-      case 'Forks':
-        setField('Forks');
-        break;
-      case 'Stars':
-        setField('Stars');
-        break;
-      case '# of commits in the last 12 months':
-        setField('# of commits in the last 12 months');
-        break;
-      default:
-        break;
-    }
+    setField(e.target.name as 'Contributors' | 'Watchers' | 'Forks' | 'Stars');
   }
 
   return (
     <div className='h-[600px] mb-12 flex items-center' suppressHydrationWarning>
-      <div className='min-w-[300px] p-3'>
-        <p>Please select a field</p>
-        <div className="grid gap-3">
-          <RadioButton
-            name="Stars"
-            id="Stars"
-            value="Stars"
-            text="Stars"
-            onChange={onChangeField}
-            checked={field === 'Stars'}
-          />
-          <RadioButton
-            name="Contributors"
-            id="Contributors"
-            value="Contributors"
-            text="Contributors"
-            onChange={onChangeField}
-            checked={field === 'Contributors'}
-          />
-          <RadioButton
-            name="Watchers"
-            id="Watchers"
-            value="Watchers"
-            text="Watchers"
-            onChange={onChangeField}
-            checked={field === 'Watchers'}
-          />
-          <RadioButton
-            name="Forks"
-            id="Forks"
-            value="Forks"
-            text="Forks"
-            onChange={onChangeField}
-            checked={field === 'Forks'}
-          />
-          <RadioButton
-            name="# of commits in the last 12 months"
-            id="# of commits in the last 12 months"
-            value="# of commits in the last 12 months"
-            text="# of commits in the last 12 months"
-            onChange={onChangeField}
-            checked={field === '# of commits in the last 12 months'}
-          />
-        </div>
-      </div>
+      <RadioGroup
+        fields={['Contributors', 'Watchers', 'Forks', 'Stars']}
+        selectedField={field}
+        onChangeField={onChangeField}
+      />
       <div className='w-full h-[600px] overflow-auto relative'>
         <Pie
           options={{

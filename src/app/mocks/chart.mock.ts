@@ -5,6 +5,14 @@ export const options: ChartOptions<"bar"> = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
+      title: {
+        display: true,
+        text: "Please select a fields",
+        padding: 2,
+        font: {
+          size: 18,
+        }
+      },
       labels: {
         usePointStyle: true,
         pointStyle: "circle",

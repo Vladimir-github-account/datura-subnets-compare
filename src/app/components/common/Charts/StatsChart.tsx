@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
-import { ArrowSquareOut, ChartPie, Stack, StackPlus, StackMinus } from '@phosphor-icons/react';
+import { ChartPie, Stack, StackPlus, StackMinus } from '@phosphor-icons/react';
 import { RepositoryData } from '@/app/interfaces/repositoryData';
 import { useHomePageChartContext } from '@/app/context/homePageChartContext';
 import MultipleBarChart from '@/app/components/common/Charts/MultipleBarChart';

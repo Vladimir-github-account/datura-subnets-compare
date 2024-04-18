@@ -139,7 +139,7 @@ export const Sidebar = () => {
               onClick={() => setActiveRepos(activeRepos.length === data.length ? [] : data)}
             />
           </div>
-          <ul className='px-3 py-2 rounded-md'>
+          <ul className='pl-3 py-2 rounded-md'>
             {data.map((el: RepositoryData, index: number) => (
               <SidebarListItem
                 activeRepos={activeRepos}

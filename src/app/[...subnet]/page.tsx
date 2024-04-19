@@ -12,6 +12,7 @@ import { SubnetData } from '@/app/interfaces/subnetData';
 
 // Context
 import { useSidebarContext } from '@/app/context/sidebarContext';
+import { ContributorsList } from '../components/common/ContributorsList/ContributorsList';
 
 const defaultSubnetData: SubnetData = {
   forks: 0,
@@ -60,26 +61,7 @@ export default function SubnetPage({ params }: { params: { subnet: string[] } })
                 Documentation: {subnetData.documentation}
               </Link>
             )}
-            {subnetData.contributors.length > 0 && (
-              <>
-                <h2 className='text-xl text-gray-400'>Contributors</h2>
-                <ul>
-                  {subnetData.contributors.map((contributor, index) => (
-                    <li className='flex items-center gap-3 py-1.5' key={index}>
-                      <Image
-                        src={contributor.avatar_url || ''}
-                        width={40}
-                        height={40}
-                        alt="Picture of the author"
-                      />
-                      <Link href={contributor.html_url} passHref={true} target='#'>
-                        {contributor.login}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
+            {subnetData.contributors.length > 0 && <ContributorsList contributors={subnetData.contributors}/>}
           </div>
         </div>
       )}

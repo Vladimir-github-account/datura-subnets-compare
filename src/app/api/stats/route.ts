@@ -5,7 +5,6 @@ import { Endpoints } from "@octokit/types";
 
 type weeklyCommitCountResponse = Endpoints['GET /repos/{owner}/{repo}/stats/participation']["response"];
 type weeklyCommitActivityResponse = Endpoints['GET /repos/{owner}/{repo}/stats/code_frequency']["response"];
-type contributorsResponse = Endpoints['GET /repos/{owner}/{repo}/stats/contributors']["response"];
 
 const config: AxiosRequestConfig = {
   headers: {
@@ -39,7 +38,6 @@ export async function GET(req: NextRequest) {
     const repo = req.nextUrl.searchParams.get('repo');
     const { data: weeklyCommitCount } = await axios.get<weeklyCommitCountResponse["data"]>(`https://api.github.com/repos/${repo}/stats/participation`, config);
     const { data: weeklyCommitActivity } = await axios.get<weeklyCommitActivityResponse["data"]>(`https://api.github.com/repos/${repo}/stats/code_frequency`, config);
-    const { data: contributors } = await axios.get<contributorsResponse["data"]>(`https://api.github.com/repos/${repo}/stats/contributors`, config);
     const commitArr = [...weeklyCommitCount.all].reverse();
     const lastYearCommitsCount = commitArr.reduce((acc, el) => acc + el, 0);
     const lastThreeMonthsCommitsCount = [...commitArr].slice(0, 13).reduce((acc, el) => acc + el, 0);
@@ -57,7 +55,6 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       repo,
-      contributorsCount: contributors.length || 0,
       lastYearCommitsCount,
       lastMonthCommitsCount,
       lastThreeMonthsCommitsCount,

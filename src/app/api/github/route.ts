@@ -5,6 +5,7 @@ import { Endpoints } from "@octokit/types";
 
 // type listRepoPullsResponse = Endpoints["GET /repos/{owner}/{repo}/pulls"]["response"];
 type listUserReposResponse = Endpoints["GET /repos/{owner}/{repo}"]["response"];
+type contributorsResponse = Endpoints["GET /repos/{owner}/{repo}/contributors"]["response"];
 
 const config: AxiosRequestConfig = {
   headers: {
@@ -16,9 +17,11 @@ export async function GET(req: NextRequest) {
   try {
     const repo = req.nextUrl.searchParams.get('repo');
     const { data: repoData } = await axios.get<listUserReposResponse["data"]>(`https://api.github.com/repos/${repo}`, config);
+    const { data: contributors } = await axios.get<contributorsResponse["data"]>(`https://api.github.com/repos/${repo}/contributors`, config);
 
     return NextResponse.json({
       repo,
+      contributorsCount: contributors.length || 0,
       forks: repoData.forks_count,
       stars: repoData.stargazers_count,
       watchers: repoData.subscribers_count,

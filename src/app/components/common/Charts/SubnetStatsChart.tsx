@@ -1,11 +1,22 @@
 import MultipleBarChart from '@/app/components/common/Charts/MultipleBarChart';
 import { SubnetData } from '@/app/interfaces/subnetData';
+import React, { useState } from 'react';
+import { RadioGroup } from '@/app/components/common/RadioGroup/RadioGroup';
 
 interface ChartProps {
   data: SubnetData[]
 }
+type SubnetStatsField =
+  'Watchers' |
+  'Forks' |
+  'Stars';
 
 const SubnetStatsChart = ({ data }: ChartProps) => {
+  const [fields, setFields] = useState<SubnetStatsField[]>([
+    'Watchers',
+    'Forks',
+    'Stars',
+  ]);
   const { labels, forks, stars, watchers } = data.reduce( (acc: any, el: SubnetData) => (
       {
         labels: [...acc.labels, el.repo.length > 30 ? el.repo.substring(0, 30) + '...' : el.repo],
@@ -45,16 +56,37 @@ const SubnetStatsChart = ({ data }: ChartProps) => {
     },
   ];
 
+  const onClickField = (e: any) => {
+    setFields(prevState => {
+        return prevState.includes(e.target.name as SubnetStatsField)
+          ? prevState.filter(field => e.target.name as SubnetStatsField !== field)
+          : [...prevState, e.target.name as SubnetStatsField]
+      }
+    );
+  }
+
   return (
-    <div className='h-[600px] overflow-auto mb-12 flex gap-6' suppressHydrationWarning>
-      <div className='w-full min-w-[500px] overflow-auto relative'>
-        <MultipleBarChart
-          datasets={datasets}
-          defaultAxis='x'
-          labels={labels}
-          isStacked={false}
-        />
+    <div className='mb-12'>
+      <div className='h-[550px] overflow-auto  flex gap-6' suppressHydrationWarning>
+        <div className='w-full min-w-[500px] overflow-auto relative'>
+          <MultipleBarChart
+            datasets={datasets.filter((dataField) => fields.includes(dataField.label as SubnetStatsField))}
+            defaultAxis='x'
+            labels={labels}
+            isStacked={false}
+          />
+        </div>
       </div>
+      <RadioGroup
+        fields={[
+          'Watchers',
+          'Forks',
+          'Stars',
+        ]}
+        inline
+        selectedFields={fields}
+        onClickField={onClickField}
+      />
     </div>
   );
 };

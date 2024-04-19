@@ -73,7 +73,7 @@ const StatsChart = ({ data }: ChartProps) => {
     },
   ];
 
-  const onChangeField = (e: any) => {
+  const onClickField = (e: any) => {
     setFields(prevState => {
         return prevState.includes(e.target.name as StatChartField)
           ? prevState.filter(field => e.target.name as StatChartField !== field)
@@ -84,7 +84,7 @@ const StatsChart = ({ data }: ChartProps) => {
 
   return (
     <div className='flex flex-col mb-12'>
-      <div className='h-[800px] overflow-auto flex gap-6' suppressHydrationWarning>
+      <div className='h-[700px] overflow-auto flex gap-6' suppressHydrationWarning>
         <div className='w-full min-w-[900px] overflow-auto relative'>
           <MultipleBarChart
             datasets={datasets.filter((dataField) => fields.includes(dataField.label as StatChartField))}
@@ -125,7 +125,7 @@ const StatsChart = ({ data }: ChartProps) => {
         ]}
         inline
         selectedFields={fields}
-        onClickField={onChangeField}
+        onClickField={onClickField}
       />
     </div>
   );

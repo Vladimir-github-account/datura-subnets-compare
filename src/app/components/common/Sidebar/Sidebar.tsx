@@ -4,6 +4,9 @@ import Select from 'react-select';
 import { Tooltip } from 'react-tooltip';
 import classNames from 'classnames';
 import { CheckCircle, SortAscending, SortDescending, SquareHalf } from '@phosphor-icons/react';
+import { repos } from '@/app/constants';
+import { getData } from '@/app/services/github';
+import { getStats } from '@/app/services/stats';
 import { SidebarListItem } from '@/app/components/common/Sidebar/SidebarListItem';
 import { RepositoryData } from '@/app/interfaces/repositoryData';
 
@@ -11,7 +14,8 @@ import { RepositoryData } from '@/app/interfaces/repositoryData';
 import { useDataContext } from '@/app/context/dataContext';
 import { useActiveReposContext } from '@/app/context/activeReposContext';
 import { useSidebarContext } from '@/app/context/sidebarContext';
-import { useStatsLoadingContext } from '@/app/context/dataLoadingContext';
+import { useDataLoadingContext } from '@/app/context/dataLoadingContext';
+import { useStatsLoadingContext } from '@/app/context/statsLoadingContext';
 
 type OptionType = {
   value: string;
@@ -33,10 +37,12 @@ const options: OptionType[] = [
 ];
 
 export const Sidebar = () => {
-  const { data } = useDataContext();
+  const { isDataLoading, setIsDataLoading } = useDataLoadingContext();
+
+  const { data, setData } = useDataContext();
   const { activeRepos, setActiveRepos } = useActiveReposContext();
   const { isOpen, setIsOpen } = useSidebarContext();
-  const { isStatsLoading } = useStatsLoadingContext();
+  const { isStatsLoading, setIsStatsLoading } = useStatsLoadingContext();
   const [selectedOption, setSelectedOption] = useState(options[0]);
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC');
 
@@ -46,6 +52,42 @@ export const Sidebar = () => {
       setActiveRepos(data);
     }
   };
+
+  useEffect(() => {
+    if (!data.length) {
+      const promises = repos.map( repo => getData(repo));
+      Promise.allSettled(promises)
+        .then(data => {
+          const successData = data.reduce( (acc: any, el) => {
+              if (el.status === 'rejected') {
+                return acc
+              }
+              return [...acc, el.value.data]
+            }, []
+          );
+          setData(successData);
+          setActiveRepos(successData);
+
+          const statsPromises = repos.map( repo => getStats(repo));
+          Promise.allSettled(statsPromises)
+            .then(responseData => {
+              const successData = responseData.reduce( (acc: any, el) => {
+                  if (el.status === 'rejected') {
+                    return acc
+                  }
+                  return [...acc, el.value.data]
+                }, []
+              );
+
+              setData(prevState => prevState.map((el, index) => ({...el, ...successData[index]})));
+              setActiveRepos(prevState=> prevState.map((el: any, index: number) => ({...el, ...successData[index]})));
+            })
+            .finally(() => setIsStatsLoading(false));
+        })
+        .finally(() => setIsDataLoading(false));
+    }
+
+  }, []);
 
   useEffect(() => {
     if (sortOrder === 'ASC') {
@@ -81,7 +123,7 @@ export const Sidebar = () => {
           </div>
           <div suppressHydrationWarning className='flex items-center pt-3 px-3 gap-4'>
             <Select
-              isDisabled={isStatsLoading}
+              isDisabled={isStatsLoading || isDataLoading}
               instanceId='sort-select'
               className='w-full font-medium text-[#2f343b]'
               value={selectedOption}

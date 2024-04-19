@@ -1,9 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { getData } from '@/app/services/github';
-import { getStats } from '@/app/services/stats';
-import { repos } from '@/app/constants';
 import ActivityChart from '@/app/components/common/Charts/ActivityChart';
 import ThemeSwitcherComponent from '@/app/components/common/buttons/ThemeSwitcher/ThemeSwitcher';
 import PieChart from '@/app/components/common/Charts/PieChart';
@@ -16,54 +12,17 @@ import { useDataContext } from '@/app/context/dataContext';
 import { useActiveReposContext } from '@/app/context/activeReposContext';
 import { useSidebarContext } from '@/app/context/sidebarContext';
 import { useHomePageChartContext } from '@/app/context/homePageChartContext';
-import { useStatsLoadingContext } from '@/app/context/dataLoadingContext';
+import { useStatsLoadingContext } from '@/app/context/statsLoadingContext';
+import { useDataLoadingContext } from '@/app/context/dataLoadingContext';
 
 export default function Home() {
-  const { data, setData } = useDataContext();
-  const { activeRepos,setActiveRepos } = useActiveReposContext();
+  const { data } = useDataContext();
+  const { activeRepos } = useActiveReposContext();
   const { homePageChart } = useHomePageChartContext();
   const { isOpen } = useSidebarContext();
-  const { isStatsLoading, setIsStatsLoading } = useStatsLoadingContext();
-  const [isDataLoading, setIsDataLoading] = useState<boolean>(true);
+  const { isStatsLoading } = useStatsLoadingContext();
+  const { isDataLoading} = useDataLoadingContext();
 
-
-  useEffect(() => {
-    const promises = repos.map( repo => getData(repo));
-    Promise.allSettled(promises)
-      .then(data => {
-        const successData = data.reduce( (acc: any, el) => {
-            if (el.status === 'rejected') {
-              return acc
-            }
-            return [...acc, el.value.data]
-          }, []
-        );
-
-        setData(successData);
-        setActiveRepos(successData);
-      })
-      .finally(() => setIsDataLoading(false));
-  }, []);
-
-  useEffect(() => {
-    if (data.length && isStatsLoading) {
-      const statsPromises = repos.map( repo => getStats(repo));
-      Promise.allSettled(statsPromises)
-        .then(responseData => {
-          const successData = responseData.reduce( (acc: any, el) => {
-              if (el.status === 'rejected') {
-                return acc
-              }
-              return [...acc, el.value.data]
-            }, []
-          );
-
-          setData(data.map((el, index) => ({...el, ...successData[index]})));
-          setActiveRepos(data.map((el, index) => ({...el, ...successData[index]})));
-        })
-        .finally(() => setIsStatsLoading(false));
-    }
-  }, [data.length, isStatsLoading]);
 
   return (
     <HomePageWrapper>

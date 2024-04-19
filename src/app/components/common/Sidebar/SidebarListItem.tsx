@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowSquareOut, Eye, EyeClosed } from '@phosphor-icons/react';
 import classNames from 'classnames';
 import { RepositoryData } from '@/app/interfaces/repositoryData';
@@ -19,6 +20,7 @@ export const SidebarListItem = ({
   sortOrder: 'ASC' | 'DESC';
 }) => {
   const isSelected = activeRepos.find((repo: any) => repo.repo === itemData.repo)
+  const router = useRouter()
 
   return <li
     className={classNames('text-xs flex justify-between items-center gap-1 py-3 h-10 mr-1 opacity-80 text-gray-400 cursor-pointer select-none [&:hover>div]:opacity-100', {
@@ -56,8 +58,16 @@ export const SidebarListItem = ({
         {isSelected && <Eye size={24} />}
         {!isSelected && <EyeClosed size={24} />}
       </span>
-      <ArrowSquareOut size={24} onClick={(e) => {
+      <ArrowSquareOut
+        data-tooltip-class-name='text-xs'
+        data-tooltip-content="Open subnet's page"
+        data-tooltip-id="list-item-tooltip"
+        data-tooltip-place="bottom-end"
+        data-tooltip-delay-show={600}
+        size={24}
+        onClick={(e) => {
         e.stopPropagation();
+        router.push(`/${itemData.repo}`);
       }}/>
     </div>
   </li>

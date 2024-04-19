@@ -11,26 +11,26 @@ import {
 } from 'react';
 
 type Context = {
-  isStatsLoading: boolean;
-  setIsStatsLoading: Dispatch<SetStateAction<boolean>>;
+  isDataLoading: boolean;
+  setIsDataLoading: Dispatch<SetStateAction<boolean>>;
 };
 
-export const StatsLoadingContext = createContext<Context>({
-  isStatsLoading: true,
-  setIsStatsLoading: () => {},
+export const DataLoadingContext = createContext<Context>({
+  isDataLoading: true,
+  setIsDataLoading: () => {},
 });
 
-export const StatsLoadingContextProvider = ({
+export const DataLoadingContextProvider = ({
   children,
 }: {
   children: ReactNode;
 }) => {
-  const [isStatsLoading, setIsStatsLoading] = useState<boolean>(true);
-  const value = useMemo(() => ({ isStatsLoading, setIsStatsLoading }), [isStatsLoading]);
+  const [isDataLoading, setIsDataLoading] = useState<boolean>(true);
+  const value = useMemo(() => ({ isDataLoading, setIsDataLoading }), [isDataLoading]);
 
   return (
-    <StatsLoadingContext.Provider value={value}>{children}</StatsLoadingContext.Provider>
+    <DataLoadingContext.Provider value={value}>{children}</DataLoadingContext.Provider>
   );
 };
 
-export const useStatsLoadingContext = () => useContext(StatsLoadingContext);
+export const useDataLoadingContext = () => useContext(DataLoadingContext);

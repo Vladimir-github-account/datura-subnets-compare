@@ -53,7 +53,6 @@ const SubnetStatsChart = ({ data }: ChartProps) => {
           defaultAxis='x'
           labels={labels}
           isStacked={false}
-          isDisplayLegend
         />
       </div>
     </div>

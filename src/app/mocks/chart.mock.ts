@@ -3,6 +3,11 @@ import { ChartOptions } from "chart.js";
 export const options: ChartOptions<"bar"> = {
   responsive: true,
   maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
 };
 
 export const pieChartOptions: ChartOptions<"pie"> = {

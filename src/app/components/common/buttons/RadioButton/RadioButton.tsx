@@ -5,27 +5,28 @@ const RadioButton = ({
   name,
   id,
   value,
-  onChange,
+  onClick,
   checked,
   text
 }: {
   name: string,
   id: string,
   value: string,
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+  onClick: (e: React.MouseEvent<HTMLInputElement>) => void,
   checked: boolean,
   text: string
 }) => {
   return (
-    <label htmlFor={id} className="text-sm cursor-pointer w-[258px]">
+    <label htmlFor={id} className="text-sm cursor-pointer xl:w-auto">
       <input
         className="m-0 invisible [&:checked+span]:border-primary [&:checked+span:after]:opacity-100"
         type="radio"
         name={name}
         id={id}
         value={value}
-        onChange={onChange}
+        onClick={onClick}
         checked={checked}
+        readOnly
       />
       <span className={classNames(
         'relative -left-2 top-1 cursor-pointer size-4 border border-primary rounded',

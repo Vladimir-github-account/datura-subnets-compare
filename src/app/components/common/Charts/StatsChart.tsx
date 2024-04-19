@@ -1,16 +1,29 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { ChartPie, Stack, StackPlus, StackMinus } from '@phosphor-icons/react';
 import { RepositoryData } from '@/app/interfaces/repositoryData';
 import { useHomePageChartContext } from '@/app/context/homePageChartContext';
 import MultipleBarChart from '@/app/components/common/Charts/MultipleBarChart';
+import { RadioGroup } from '@/app/components/common/RadioGroup/RadioGroup';
 
 interface ChartProps {
   data: RepositoryData[]
 }
 
+type StatChartField =
+  'Contributors' |
+  'Watchers' |
+  'Forks' |
+  'Stars';
+
 const StatsChart = ({ data }: ChartProps) => {
   const { setHomePageChart } = useHomePageChartContext();
+  const [fields, setFields] = useState<StatChartField[]>([
+    'Contributors',
+    'Watchers',
+    'Forks',
+    'Stars',
+  ]);
   const [isStacked, setIsStacked] = useState(true);
   const { contributorsCount, labels, forks, stars, watchers } = data.reduce( (acc: any, el: RepositoryData) => (
       {
@@ -60,39 +73,60 @@ const StatsChart = ({ data }: ChartProps) => {
     },
   ];
 
+  const onChangeField = (e: any) => {
+    setFields(prevState => {
+        return prevState.includes(e.target.name as StatChartField)
+          ? prevState.filter(field => e.target.name as StatChartField !== field)
+          : [...prevState, e.target.name as StatChartField]
+      }
+    );
+  }
+
   return (
-    <div className='h-[800px] overflow-auto mb-12 flex gap-6' suppressHydrationWarning>
-      <div className='w-full min-w-[900px] overflow-auto relative'>
-        <MultipleBarChart
-          datasets={datasets}
-          defaultAxis='y'
-          labels={labels}
-          isStacked={isStacked}
-          isDisplayLegend
-        />
-        <Stack
-          className='cursor-pointer absolute top-0 right-24'
-          size={32}
-          data-tooltip-id='chart-stack'
-          data-tooltip-delay-show={300}
-          data-tooltip-place='bottom-end'
-          onClick={() => setIsStacked( prevState => !prevState)}
-        />
-        <ReactTooltip id='chart-stack'>
-          <div className='flex gap-2'>
-            {isStacked ? <StackMinus size={24} /> : <StackPlus size={24} />}
-            <span>{isStacked ? 'Unstack' : 'Stack'}</span>
-          </div>
-        </ReactTooltip>
-        <ChartPie
-          className='cursor-pointer absolute top-0 right-[52px]'
-          size={32}
-          data-tooltip-id='chart-pie'
-          data-tooltip-delay-show={300}
-          data-tooltip-place='bottom-end'
-          onClick={() => setHomePageChart('pie')}
-        />
+    <div className='flex flex-col mb-12'>
+      <div className='h-[800px] overflow-auto flex gap-6' suppressHydrationWarning>
+        <div className='w-full min-w-[900px] overflow-auto relative'>
+          <MultipleBarChart
+            datasets={datasets.filter((dataField) => fields.includes(dataField.label as StatChartField))}
+            defaultAxis='y'
+            labels={labels}
+            isStacked={isStacked}
+          />
+          <Stack
+            className='cursor-pointer absolute top-0 right-24'
+            size={32}
+            data-tooltip-id='chart-stack'
+            data-tooltip-delay-show={300}
+            data-tooltip-place='bottom-end'
+            onClick={() => setIsStacked(prevState => !prevState)}
+          />
+          <ReactTooltip id='chart-stack'>
+            <div className='flex gap-2'>
+              {isStacked ? <StackMinus size={24}/> : <StackPlus size={24}/>}
+              <span>{isStacked ? 'Unstack' : 'Stack'}</span>
+            </div>
+          </ReactTooltip>
+          <ChartPie
+            className='cursor-pointer absolute top-0 right-[52px]'
+            size={32}
+            data-tooltip-id='chart-pie'
+            data-tooltip-delay-show={300}
+            data-tooltip-place='bottom-end'
+            onClick={() => setHomePageChart('pie')}
+          />
+        </div>
       </div>
+      <RadioGroup
+        fields={[
+          'Contributors',
+          'Watchers',
+          'Forks' ,
+          'Stars',
+        ]}
+        inline
+        selectedFields={fields}
+        onClickField={onChangeField}
+      />
     </div>
   );
 };

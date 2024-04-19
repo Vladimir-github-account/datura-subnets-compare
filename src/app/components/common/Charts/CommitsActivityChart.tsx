@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { RepositoryData } from '@/app/interfaces/repositoryData';
 import { RadioGroup } from '@/app/components/common/RadioGroup/RadioGroup';
 import MultipleBarChart from '@/app/components/common/Charts/MultipleBarChart';
@@ -47,7 +47,7 @@ const CommitsActivityChart = ({ data }: ChartProps) => {
     }
   })
 
-  const onChangeField = (e: ChangeEvent<HTMLInputElement>) => {
+  const onClickField = (e: any) => {
     setField(e.target.name as CommitActivityField);
   }
 
@@ -91,7 +91,6 @@ const CommitsActivityChart = ({ data }: ChartProps) => {
             datasets={datasets.filter((dataField) => dataField.label === field)}
             defaultAxis='x'
             labels={chartLabels}
-            isDisplayLegend={false}
             isStacked={false}
           />
         </div>
@@ -104,8 +103,8 @@ const CommitsActivityChart = ({ data }: ChartProps) => {
           '# of commits in the last 12 months',
         ]}
         inline
-        selectedField={field}
-        onChangeField={onChangeField}
+        selectedFields={[field]}
+        onClickField={onClickField}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { ArcElement, Chart, Legend, Tooltip } from 'chart.js';
 import { ChartBar } from '@phosphor-icons/react';
@@ -60,7 +60,7 @@ const PieChart = ({ data }: ChartProps) => {
     },
   ];
 
-  const onChangeField = (e: ChangeEvent<HTMLInputElement>) => {
+  const onClickField = (e: any) => {
     setField(e.target.name as 'Contributors' | 'Watchers' | 'Forks' | 'Stars');
   }
 
@@ -68,8 +68,8 @@ const PieChart = ({ data }: ChartProps) => {
     <div className='h-[600px] mb-12 flex items-center' suppressHydrationWarning>
       <RadioGroup
         fields={['Contributors', 'Watchers', 'Forks', 'Stars']}
-        selectedField={field}
-        onChangeField={onChangeField}
+        selectedFields={[field]}
+        onClickField={onClickField}
       />
       <div className='w-full h-[600px] overflow-auto relative'>
         <Pie
